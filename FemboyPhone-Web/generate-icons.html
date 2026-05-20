@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<!-- Open this file in a browser, then right-click each canvas and "Save image as"
+     to get icon-192.png and icon-512.png for the PWA manifest.             -->
+<html>
+<head><title>Icon Generator</title>
+<style>body{background:#111;display:flex;gap:20px;padding:20px;align-items:flex-start}</style>
+</head>
+<body>
+<canvas id="c192" width="192" height="192"></canvas>
+<canvas id="c512" width="512" height="512"></canvas>
+<script>
+function draw(canvas) {
+  const s = canvas.width;
+  const ctx = canvas.getContext('2d');
+  const r = s * 0.22;
+
+  // Background
+  const bg = ctx.createLinearGradient(0, 0, s, s);
+  bg.addColorStop(0, '#1a0a30');
+  bg.addColorStop(1, '#0a1040');
+  ctx.fillStyle = bg;
+  ctx.roundRect(0, 0, s, s, r);
+  ctx.fill();
+
+  // Glow
+  const glow = ctx.createRadialGradient(s*0.5, s*0.4, 0, s*0.5, s*0.4, s*0.5);
+  glow.addColorStop(0, 'rgba(160,80,255,0.4)');
+  glow.addColorStop(1, 'transparent');
+  ctx.fillStyle = glow;
+  ctx.roundRect(0, 0, s, s, r);
+  ctx.fill();
+
+  // Phone icon outline
+  const pw = s * 0.36, ph = s * 0.58, px = (s - pw) / 2, py = (s - ph) / 2;
+  const pr = s * 0.06;
+  ctx.strokeStyle = 'rgba(255,255,255,0.9)';
+  ctx.lineWidth = s * 0.035;
+  ctx.lineJoin = 'round';
+  ctx.beginPath();
+  ctx.roundRect(px, py, pw, ph, pr);
+  ctx.stroke();
+
+  // Screen fill
+  ctx.fillStyle = 'rgba(80,40,200,0.3)';
+  const sx = px + s*0.03, sy = py + s*0.07, sw = pw - s*0.06, sh = ph - s*0.14;
+  ctx.fillRect(sx, sy, sw, sh);
+
+  // Home button dot
+  ctx.fillStyle = 'rgba(255,255,255,0.7)';
+  ctx.beginPath();
+  ctx.arc(s*0.5, py + ph - s*0.055, s*0.022, 0, Math.PI*2);
+  ctx.fill();
+
+  // Heart emoji center
+  ctx.font = `${s * 0.18}px serif`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('💜', s * 0.5, s * 0.5);
+}
+
+['c192','c512'].forEach(id => draw(document.getElementById(id)));
+</script>
+</body>
+</html>
